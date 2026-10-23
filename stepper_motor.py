@@ -32,7 +32,7 @@ class StepperMotor:
             self.current_step = step
 
     def set_step_mode(self, mode, microsteps=None):
-        on = self.pwm_pct
+        on = int(self.pwm_pct * 65535)
         # Select full, half, or generated microstepping.
         if mode == "full":
             self.step_sequence = [
@@ -68,14 +68,15 @@ class StepperMotor:
             raise ValueError("microsteps must be a positive integer")
 
         sequence = []
+        on = self.pwm_pct * 65535
         # Calculate every phase position in one complete electrical cycle.
         for step in range(
             4 * microsteps
         ):  # theta  = 0 to 2*pi for 4 phases --- theta = 2 * pi * i (index) / (4 (phases of motor) * microsteps)
             theta = -2 * math.pi * step / (4 * microsteps)
             # Calculate and scale the phase-A and phase-B amplitudes.
-            A = self.pwm_pct * math.sin(theta)
-            B = self.pwm_pct * math.cos(theta)
+            A = int(on * math.sin(theta))
+            B = int(on * math.cos(theta))
             # Map the signed values to [A+, B+, A-, B-].
             A_pos = max(0, A)
             B_pos = max(0, B)
@@ -88,7 +89,7 @@ class StepperMotor:
     def set_step(self, step):
         # Apply one step to the selected PWM outputs.
         for pin, duty_cycle in zip(self.pins, step):
-            pin.duty_u16(int(duty_cycle * 65535))
+            pin.duty_u16(duty_cycle)
 
     def step(self, direction):
         # One step forward (1) or backward (-1) from the current position, wraps around

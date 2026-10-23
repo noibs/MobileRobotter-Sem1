@@ -11,5 +11,5 @@ time.sleep(5)
 for _ in range(4):
     robot.drive_cm(100, "forward", delay_us=5000)
     time.sleep(1)
-    robot.turn_in_place(90, "left", delay_us=1000)
+    robot.turn_in_place(90, "left", delay_us=5000)
     time.sleep(1)
