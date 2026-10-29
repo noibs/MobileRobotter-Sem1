@@ -1,0 +1,77 @@
+version = 1
+revision = 3
+requires-python = ">=3.14"
+
+[[package]]
+name = "micropython-rp2-stubs"
+version = "1.29.0.post1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "micropython-stdlib-stubs" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/da/48/10a2aca9600290ed5c0561afddc3f9489f974d08b8107c59f9973b4607be/micropython_rp2_stubs-1.29.0.post1.tar.gz", hash = "sha256:131e0425881f6f535d97b312f42d57ab43834f72acf954749cc0b4f647a275a7", size = 101394, upload-time = "2026-08-30T14:52:50.195Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7c/ae/d8110f61a0aabbf09df1ffb01652beabf9d13396ee9999369854c970ea5e/micropython_rp2_stubs-1.29.0.post1-py2.py3-none-any.whl", hash = "sha256:a26183e4ef7557469fd3387677a8e08cf1bc856a6cbe13acc773e57e94f0625c", size = 131451, upload-time = "2026-08-30T14:52:48.807Z" },
+]
+
+[[package]]
+name = "micropython-stdlib-stubs"
+version = "1.29.0.post2"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/e6/3edc7601ecbfb1deaee29e7e8beadb7e2d4877b5ed4f71f0c6644bb7493d/micropython_stdlib_stubs-1.29.0.post2-py3-none-any.whl", hash = "sha256:bdcd54d9896d8e1d455b3a99995d82a8399e1e2c9cb94eacabe278e5c2397783", size = 154274, upload-time = "2026-08-31T11:34:33.329Z" },
+]
+
+[[package]]
+name = "mobilerobotter-sem1"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "mpremote" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "micropython-rp2-stubs" },
+    { name = "mpremote" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "mpremote", specifier = ">=1.29.0" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "micropython-rp2-stubs", specifier = ">=1.29.0.post1" },
+    { name = "mpremote", specifier = ">=1.29.0" },
+]
+
+[[package]]
+name = "mpremote"
+version = "1.29.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "platformdirs" },
+    { name = "pyserial" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ac/b7/8c44eb606b0e53517fd6ddda3f598b3bdb180c181f4e0bcbb9b7743f4cb5/mpremote-1.29.0.tar.gz", hash = "sha256:ab0b6f21059698e573ca076fe9a0299e5fe7bbc3ca3f5b2f00007e22e51c7b80", size = 33808, upload-time = "2026-08-24T13:54:53.108Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/51/85/f68fbcfe4d1ce32a7f2154a48f68195d4f256e3700b69ad0d5b758ee3b37/mpremote-1.29.0-py3-none-any.whl", hash = "sha256:dedac688bcd65b9d4d5b7a66119332f2830000088321107994959333f53e41c8", size = 38653, upload-time = "2026-08-24T13:54:51.674Z" },
+]
+
+[[package]]
+name = "platformdirs"
+version = "4.14.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/28/1c058a9143d2304b3078f8dadcbb9dc27f7d3581b5d05157c84869c4cc0d/platformdirs-4.14.0.tar.gz", hash = "sha256:83f009c1e8c5fc36869b5171755b291887bd2cade7965233cdfabd23d754720b", size = 70387, upload-time = "2026-10-28T18:27:30.973Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/69/2b/887969ef4bb53e0cb271dc7c3f4a73d50c5d58bb88aeaae311e3340cd57e/platformdirs-4.14.0-py3-none-any.whl", hash = "sha256:1dadfc59a8a5d7565b3d9270ae8fa71c065595352c4277b41c11ee6c222c4b91", size = 35259, upload-time = "2026-10-28T18:27:29.659Z" },
+]
+
+[[package]]
+name = "pyserial"
+version = "3.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/7d/ae3f0a63f41e4d2f6cb66a5b57197850f919f59e558159a4dd3a818f5082/pyserial-3.5.tar.gz", hash = "sha256:3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb", size = 159125, upload-time = "2020-11-23T03:59:15.045Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/07/bc/587a445451b253b285629263eb51c2d8e9bcea4fc97826266d186f96f558/pyserial-3.5-py2.py3-none-any.whl", hash = "sha256:c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0", size = 90585, upload-time = "2020-11-23T03:59:13.41Z" },
+]

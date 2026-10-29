@@ -167,3 +167,4 @@ site/
 __pycache__/
 *.mpy
 .DS_Store
+/typings

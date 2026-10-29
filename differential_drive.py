@@ -1,10 +1,19 @@
-from stepper_motor import StepperMotor
-from time import sleep_us
 import math
+from time import sleep_us
+
+from stepper_motor import StepperMotor
 
 
 class DifferentialDrive:
-    def __init__(self, left, right, wheel_diameter_cm=8.7, wheelbase_cm=23.3, invert_left=False, invert_right=False,):
+    def __init__(
+        self,
+        left,
+        right,
+        wheel_diameter_cm=8.7,
+        wheelbase_cm=23.3,
+        invert_left=False,
+        invert_right=False,
+    ):
         # Geometry is in cm and calculated once here instead of in every method
         self.left_motor = left
         self.right_motor = right
@@ -18,7 +27,41 @@ class DifferentialDrive:
         self.right_sign = -1 if invert_right else 1
         self.stop()
 
-    def _run_steps(self, left_steps, right_steps, left_direction, right_direction, delay_us):
+    def _ramp_delay(
+        self, index, total_steps, start_delay_us, target_delay_us, ramp_steps
+    ):
+        # Use at most half the move
+        ramp = min(ramp_steps, total_steps // 2)
+
+        # How many steps to closest end of the move (start or end)
+        nearest = min(index, total_steps - 1 - index)
+
+        # Very short move (1 step): just go slowly
+        if ramp == 0:
+            return start_delay_us
+
+        # Not near either end: full speed
+        if nearest >= ramp:
+            return target_delay_us
+
+        # Inside the ramp we increase speed with constant acceleration (math done with help from Claude)
+        start_speed = 1_000_000 / start_delay_us  # steps per second
+        target_speed = 1_000_000 / target_delay_us
+        speed = math.sqrt(
+            start_speed**2 + (target_speed**2 - start_speed**2) * nearest / ramp
+        )
+        return int(1_000_000 / speed)
+
+    def _run_steps(
+        self,
+        left_steps,
+        right_steps,
+        left_direction,
+        right_direction,
+        delay_us,
+        start_delay_us=8000,  # we need to test these two values
+        ramp_steps=50,
+    ):
         if left_steps < 0 or right_steps < 0:
             raise ValueError("Steps must be non-negative.")
 
@@ -26,8 +69,13 @@ class DifferentialDrive:
         left_step = left_direction * self.left_sign
         right_step = right_direction * self.right_sign
 
-        delay_us = max(delay_us, self.left_motor.min_delay_us, self.right_motor.min_delay_us)
+        delay_us = max(
+            delay_us, self.left_motor.min_delay_us, self.right_motor.min_delay_us
+        )
 
+        start_delay_us = max(start_delay_us, delay_us)
+
+        total_steps = max(left_steps, right_steps)
         try:
             # Runs until the wheel with most steps is done, the other stops when its steps are used
             for index in range(max(left_steps, right_steps)):
@@ -36,7 +84,11 @@ class DifferentialDrive:
                     self.left_motor.step(left_step)
                 if index < right_steps:
                     self.right_motor.step(right_step)
-                sleep_us(delay_us)
+                sleep_us(
+                    self._ramp_delay(
+                        index, total_steps, start_delay_us, delay_us, ramp_steps
+                    )
+                )
         finally:
             self.stop()
 
