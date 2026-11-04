@@ -7,7 +7,7 @@ class StepperMotor:
     def __init__(self, pins, pwm_pct=0.15, frequency=18_000, mode="full", microsteps=None):
         self.total_steps = 0
         self.current_step = 0  # position in step_sequence, kept between movements
-        self.min_delay_us = 2000
+        self.min_delay_us = 1500
         self.pins = [PWM(Pin(pin, Pin.OUT)) for pin in pins]
         self.mode = None
         self.pwm_pct = pwm_pct

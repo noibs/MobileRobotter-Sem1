@@ -10,8 +10,8 @@ class DifferentialDrive:
         self,
         left,
         right,
-        wheel_diameter_cm=8.7,
-        wheelbase_cm=23.3,
+        wheel_diameter_cm=8.65,
+        wheelbase_cm=23.7,
         invert_left=False,
         invert_right=False,
         speed_cm_s=15,
@@ -40,6 +40,7 @@ class DifferentialDrive:
         if speed_cm_s <= 0:
             raise ValueError("Speed must be greater than 0.")
         steps_per_second = speed_cm_s / self.distance_per_step
+
         return int(1_000_000 / steps_per_second)
 
     def _check_acceleration(self, acceleration_cm_s2):
@@ -63,6 +64,8 @@ class DifferentialDrive:
             # Constant acceleration: v^2 = v0^2 + 2 * a * s
             speed = math.sqrt(start_speed**2 + 2 * acceleration * i)
             delays.append(int(1_000_000 / speed))
+
+        print(delays)
         return delays
 
     def _run_steps(
