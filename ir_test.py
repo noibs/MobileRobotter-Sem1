@@ -30,7 +30,7 @@ angle = 0
 while angle < TOTAL_DEG:
     t = time.ticks_diff(time.ticks_ms(), start)
     print(f"{t},{angle},{adc.read_u16()}")
-    robot.turn_in_place(STEP_DEG, "left", delay_us=5000)
+    robot.turn_in_place(STEP_DEG, "left", speed_cm_s=13.7, start_speed_cm_s=13.7)
     angle += STEP_DEG
 
 # Final reading at the end of the turn

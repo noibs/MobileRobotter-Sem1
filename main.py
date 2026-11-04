@@ -20,15 +20,9 @@ for _ in range(4):
     robot.turn_in_place(90, "left", delay_us=700)
     time.sleep(1)
 """
-
-# Test with/without ramp
-steps = robot._steps_for_distance(100)
-
 # With ramp
-print(robot._ramp_delays(4000, 700, 450))
-robot._run_steps(steps, steps, 1, 1, 700, ramp_steps=450)
+robot.drive_cm(100, speed_cm_s=34, start_speed_cm_s=17, acceleration_cm_s2=14)
 time.sleep(1)
 
-# Without ramp
-
-robot._run_steps(steps, steps, 1, 1, 700, ramp_steps=0)
+# Without ramp (starts at full speed)
+robot.drive_cm(100, speed_cm_s=34, start_speed_cm_s=34)
