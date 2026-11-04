@@ -168,3 +168,4 @@ __pycache__/
 *.mpy
 .DS_Store
 /typings
+*.csv

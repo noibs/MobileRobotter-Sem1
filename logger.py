@@ -3,19 +3,26 @@ import time
 
 import serial
 
-# Open the serial port
-# Pathen er anderledes på windows
-ser = serial.Serial( '/dev/tty.usbmodem101' , 9600)
-# Open a file to write data
-with open('data_log.csv' , 'w') as f:
-    t0 = time.time()
+ser = serial.Serial('/dev/tty.usbmodem1101', 115200, timeout=1)
+
+# Stop whatever is running and soft-reboot, which re-runs main.py
+ser.write(b'\x03\x03')   # Ctrl-C twice: interrupt
+time.sleep(0.2)
+ser.write(b'\x04')       # Ctrl-D: soft reboot
+time.sleep(1.5)
+ser.reset_input_buffer()
+
+ser.write(b"start\n")
+
+with open('data_log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
-    writer.writerow(['time_s', 'adc'])
+    writer.writerow(['t_ms', 'angle_deg', 'adc'])
     while True:
-        # Read a line from the serial port
-        line = ser.readline().decode( 'utf-8' ).strip()
-        print(line) # Print to the terminal
-        # Append the data to the file
-        writer.writerow([round(time.time() - t0, 3), int(line)])
-        f.flush() # Ensure data is written to the file
-        time.sleep(1)
+        line = ser.readline().decode('utf-8', errors='ignore').strip()
+        if not line:
+            continue
+        if line == 'done':
+            break
+        print(line)
+        writer.writerow(line.split(','))
+        f.flush()
