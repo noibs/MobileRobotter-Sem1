@@ -9,11 +9,12 @@ class StepperMotor:
         self.current_step = 0  # position in step_sequence, kept between movements
         self.min_delay_us = 1500
         self.pins = [PWM(Pin(pin, Pin.OUT)) for pin in pins]
-        self.mode = None
-        self.pwm_pct = pwm_pct
+        self.pwm_pct = pwm_pct # also sets pwm_scale through the setter
         self.frequency = frequency
         for pin in self.pins:
             pin.freq(self.frequency)
+        # duty_u16 looked up once per pin at start so its not done every step
+        self.set_duty = [pin.duty_u16 for pin in self.pins]
         self.set_step_mode(mode, microsteps)  # step_sequence exists from the start
         self.stop()
 
@@ -26,13 +27,12 @@ class StepperMotor:
         if not 0 < value <= 1:
             raise ValueError("pwm_pct must be between 0 and 1")
         self._pwm_pct = value
-        if self.mode is not None:
-            step = self.current_step
-            self.set_step_mode(self.mode, self.microsteps)
-            self.current_step = step
+        # 16384 (2^14) = 100%, Max 65535 * 16384 still fits a small int on Pico, no big ints (Claude helped optimize this)
+        self.pwm_scale = int(value * 16384)
 
     def set_step_mode(self, mode, microsteps=None):
-        on = int(self.pwm_pct * 65535)
+        on = 65535 # sequences built on full scale, scaled later
+
         # Select full, half, or generated microstepping.
         if mode == "full":
             self.step_sequence = [
@@ -57,7 +57,6 @@ class StepperMotor:
 
         else:
             raise ValueError("Invalid step mode. Choose 'full', 'half', or 'micro'.")
-        # Saved so changing pwm rebuilds the same sequence
         self.mode = mode
         self.microsteps = microsteps
         self.current_step = 0
@@ -68,7 +67,7 @@ class StepperMotor:
             raise ValueError("microsteps must be a positive integer")
 
         sequence = []
-        on = self.pwm_pct * 65535
+        on = 65535 # sequences built on full scale, scaled later
         # Calculate every phase position in one complete electrical cycle.
         for step in range(
             4 * microsteps
@@ -87,9 +86,13 @@ class StepperMotor:
         return sequence
 
     def set_step(self, step):
-        # Apply one step to the selected PWM outputs.
-        for pin, duty_cycle in zip(self.pins, step):
-            pin.duty_u16(duty_cycle)
+        # Apply one step to the PWM outputs, scaled with pwm_scale
+        scale = self.pwm_scale
+        d = self.set_duty
+        d[0]((step[0] * scale) >> 14) # >> 14 divides by 16384 (2^14)
+        d[1]((step[1] * scale) >> 14)
+        d[2]((step[2] * scale) >> 14)
+        d[3]((step[3] * scale) >> 14)
 
     def step(self, direction):
         # One step forward (1) or backward (-1) from the current position, wraps around
