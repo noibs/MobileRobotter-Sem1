@@ -10,7 +10,7 @@ right = StepperMotor([4, 5, 6, 7], pwm_pct=test_pwm, frequency=20_000, mode="hal
 robot = DifferentialDrive(left, right, invert_left=False, invert_right=False,)
 
 # Drive in a square
-"""robot._run_steps(2000, 2000, 1, 1, 1000)
+"""robot._run_steps(2000, 2000, 1, 1, 1000)"""
 
 time.sleep(1)
 robot.stop()
@@ -19,10 +19,9 @@ for _ in range(4):
     time.sleep(1)
     robot.turn_in_place(90, "left", speed_cm_s=40, start_speed_cm_s=12, acceleration_cm_s2=15)
     time.sleep(1)
-"""
-left.pwm_pct = 1.0
-left.step(1)
-print("duty at 100%:", [p.duty_u16() for p in left.pins])  # burde blive 65535
+
+
+# robot.drive_cm(100, speed_cm_s=40, start_speed_cm_s=12, acceleration_cm_s2=30)
 
 """
 # With ramp

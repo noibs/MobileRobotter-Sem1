@@ -1,15 +1,18 @@
-from machine import Pin, PWM
-from time import sleep_us
 import math
+from time import sleep_us
+
+from machine import PWM, Pin
 
 
 class StepperMotor:
-    def __init__(self, pins, pwm_pct=0.15, frequency=18_000, mode="full", microsteps=None):
+    def __init__(
+        self, pins, pwm_pct=0.15, frequency=18_000, mode="full", microsteps=None
+    ):
         self.total_steps = 0
         self.current_step = 0  # position in step_sequence, kept between movements
         self.min_delay_us = 1500
         self.pins = [PWM(Pin(pin, Pin.OUT)) for pin in pins]
-        self.pwm_pct = pwm_pct # also sets pwm_scale through the setter
+        self.pwm_pct = pwm_pct  # also sets pwm_scale through the setter
         self.frequency = frequency
         for pin in self.pins:
             pin.freq(self.frequency)
@@ -26,12 +29,13 @@ class StepperMotor:
     def pwm_pct(self, value):
         if not 0 < value <= 1:
             raise ValueError("pwm_pct must be between 0 and 1")
+        # Differential drive writes pwm_scale directly while driving, so pwm_pct won't match during move.
         self._pwm_pct = value
         # 16384 (2^14) = 100%, Max 65535 * 16384 still fits a small int on Pico, no big ints (Claude helped optimize this)
         self.pwm_scale = int(value * 16384)
 
     def set_step_mode(self, mode, microsteps=None):
-        on = 65535 # sequences built on full scale, scaled later
+        on = 65535  # sequences built on full scale, scaled later
 
         # Select full, half, or generated microstepping.
         if mode == "full":
@@ -57,8 +61,6 @@ class StepperMotor:
 
         else:
             raise ValueError("Invalid step mode. Choose 'full', 'half', or 'micro'.")
-        self.mode = mode
-        self.microsteps = microsteps
         self.current_step = 0
 
     def generate_microstep_sequence(self, microsteps):
@@ -67,7 +69,7 @@ class StepperMotor:
             raise ValueError("microsteps must be a positive integer")
 
         sequence = []
-        on = 65535 # sequences built on full scale, scaled later
+        on = 65535  # sequences built on full scale, scaled later
         # Calculate every phase position in one complete electrical cycle.
         for step in range(
             4 * microsteps
@@ -87,9 +89,10 @@ class StepperMotor:
 
     def set_step(self, step):
         # Apply one step to the PWM outputs, scaled with pwm_scale
+        # Done without loop for speed and zero memory allocation on Pico
         scale = self.pwm_scale
         d = self.set_duty
-        d[0]((step[0] * scale) >> 14) # >> 14 divides by 16384 (2^14)
+        d[0]((step[0] * scale) >> 14)  # >> 14 divides by 16384 (2^14)
         d[1]((step[1] * scale) >> 14)
         d[2]((step[2] * scale) >> 14)
         d[3]((step[3] * scale) >> 14)
