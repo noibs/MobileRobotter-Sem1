@@ -10,8 +10,6 @@ right = StepperMotor([4, 5, 6, 7], pwm_pct=test_pwm, frequency=20_000, mode="hal
 robot = DifferentialDrive(left, right, invert_left=False, invert_right=False,)
 
 # Drive in a square
-"""robot._run_steps(2000, 2000, 1, 1, 1000)"""
-
 time.sleep(1)
 robot.stop()
 for _ in range(4):
