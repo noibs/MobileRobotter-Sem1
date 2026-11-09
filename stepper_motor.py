@@ -36,6 +36,7 @@ class StepperMotor:
 
     def set_step_mode(self, mode, microsteps=None):
         on = 65535  # sequences built on full scale, scaled later
+        onHalf= int(65535 * math.sqrt(0.5))
 
         # Select full, half, or generated microstepping.
         if mode == "full":
@@ -48,13 +49,13 @@ class StepperMotor:
         elif mode == "half":
             self.step_sequence = [
                 [on, 0, 0, 0],  # Step 0
-                [on, on, 0, 0],  # Step 1
+                [onHalf, onHalf, 0, 0],  # Step 1
                 [0, on, 0, 0],  # Step 2
-                [0, on, on, 0],  # Step 3
+                [0, onHalf, onHalf, 0],  # Step 3
                 [0, 0, on, 0],  # Step 4
-                [0, 0, on, on],  # Step 5
+                [0, 0, onHalf, onHalf],  # Step 5
                 [0, 0, 0, on],  # Step 6
-                [on, 0, 0, on],  # Step 7
+                [onHalf, 0, 0, onHalf],  # Step 7
             ]
         elif mode == "micro" and microsteps is not None:
             self.step_sequence = self.generate_microstep_sequence(microsteps)
@@ -92,7 +93,7 @@ class StepperMotor:
         # Done without loop for speed and zero memory allocation on Pico
         scale = self.pwm_scale
         d = self.set_duty
-        d[0]((step[0] * scale) >> 14)  # >> 14 divides by 16384 (2^14)
+        d[0]((step[0] * scale) >> 14)  # >> 14 divides by 16384
         d[1]((step[1] * scale) >> 14)
         d[2]((step[2] * scale) >> 14)
         d[3]((step[3] * scale) >> 14)

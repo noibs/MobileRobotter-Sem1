@@ -1,5 +1,5 @@
 import time, sys
-from machine import ADC
+from machine import ADC, Pin
 
 from differential_drive import DifferentialDrive
 from stepper_motor import StepperMotor
@@ -14,9 +14,13 @@ robot = DifferentialDrive(left, right, wheel_diameter_cm=8.7, wheelbase_cm=23.3,
 
 adc = ADC(28)
 
+led = Pin(16, Pin.OUT)
+
+led.toggle()
+
 TURN_AT = 2500     # ms before the turn starts
-TOTAL_DEG = 180
-STEP_DEG = 5       # take a reading every 5 degrees
+TOTAL_DEG = 400
+STEP_DEG = 1       # take a reading every 5 degrees
 
 sys.stdin.readline()          # wait for "start" from the PC
 start = time.ticks_ms()
