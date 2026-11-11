@@ -16,9 +16,14 @@ ser.write(b"start\n")
 
 with open('data_log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
-    writer.writerow(['t_ms', 'angle_deg', 'adc'])
+    writer.writerow(['t_ms', 'angle_deg', 'adc', 'line'])
     while True:
         line = ser.readline().decode('utf-8', errors='ignore').strip()
+
+        if line.startswith(('Traceback', '>>>')) or 'Error' in line:
+             print("Pico error:", line)
+             print(ser.read(500).decode(errors='ignore'))
+             break
         if not line:
             continue
         if line == 'done':

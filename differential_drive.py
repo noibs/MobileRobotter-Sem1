@@ -96,11 +96,12 @@ class DifferentialDrive:
                     + (self.max_pwm_scale - self.min_pwm_scale) * fraction
                 )
             )
-
+        """
         print("Pwms:", pwms)
         print("---------------------")
         print("Delays:", delays)
         print("---------------------")
+        """
         return delays, pwms
 
     def _run_steps(
