@@ -205,6 +205,19 @@ class DifferentialDrive:
         if not isinstance(degrees, int) or not 0 <= degrees <= 359:
             raise ValueError("Degrees must be a whole number from 0 to 359.")
 
+    def continuous_drive(
+        self,
+        direction="forward",
+        speed_cm_s=None,
+        start_speed_cm_s=None,
+        acceleration_cm_s2=None
+    ):
+        if distance_cm < 0:
+            raise ValueError("Distance must be non-negative.")
+        if direction not in ["forward", "backward"]:
+            raise ValueError("Direction must be 'forward' or 'backward'.")
+        
+
     def drive_cm(
         self,
         distance_cm,
