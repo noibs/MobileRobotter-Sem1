@@ -10,7 +10,7 @@ class StepperMotor:
     ):
         self.total_steps = 0
         self.current_step = 0  # position in step_sequence, kept between movements
-        self.min_delay_us = 1500
+        self.min_delay_us = 750
         self.pins = [PWM(Pin(pin, Pin.OUT)) for pin in pins]
         self.pwm_pct = pwm_pct  # also sets pwm_scale through the setter
         self.frequency = frequency

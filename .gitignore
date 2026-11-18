@@ -171,3 +171,4 @@ __pycache__/
 *.csv
 .zed/
 /Dataindsamling
+/.idea

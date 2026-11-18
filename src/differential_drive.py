@@ -2,8 +2,6 @@ import gc
 import math
 from time import sleep_us, ticks_add, ticks_diff, ticks_us
 
-from stepper_motor import StepperMotor
-
 # Highest PWM allowed without ramping.
 MAX_UNRAMPED_PWM_PCT = 0.2
 
@@ -20,8 +18,8 @@ class DifferentialDrive:
         speed_cm_s=15,
         start_speed_cm_s=4,
         acceleration_cm_s2=10,
-        min_pwm_pct=0.1,
-        max_pwm_pct=0.2,
+        min_pwm_pct=0.15,
+        max_pwm_pct=0.3,
     ):
         # Geometry is in cm and calculated once here instead of in every method
         self.left_motor = left
@@ -205,18 +203,114 @@ class DifferentialDrive:
         if not isinstance(degrees, int) or not 0 <= degrees <= 359:
             raise ValueError("Degrees must be a whole number from 0 to 359.")
 
-    def continuous_drive(
-        self,
-        direction="forward",
-        speed_cm_s=None,
-        start_speed_cm_s=None,
-        acceleration_cm_s2=None
-    ):
-        if distance_cm < 0:
-            raise ValueError("Distance must be non-negative.")
+    def _run_while(self, keep_going, left_direction, right_direction, speed_cm_s=None, start_speed_cm_s=None, acceleration_cm_s2=None, deceleration_cm_s2=None, check_every=10):
+        left_step = left_direction * self.left_sign
+        right_step = right_direction * self.right_sign
+
+        if speed_cm_s is None:
+            speed_delay = self.speed_delay
+        else:
+            speed_delay = self.speed_to_delay_us(speed_cm_s)
+        if start_speed_cm_s is None:
+            start_speed_delay = self.start_speed_delay
+        else:
+            start_speed_delay = self.speed_to_delay_us(start_speed_cm_s)
+        if acceleration_cm_s2 is None:
+            acceleration_cm_s2 = self.acceleration_cm_s2
+        else:
+            self._check_acceleration(acceleration_cm_s2)
+        # Braking is harder at high speeds, so stopping takes less distance
+        if deceleration_cm_s2 is None:
+            deceleration_cm_s2 = acceleration_cm_s2
+        else:
+            self._check_acceleration(deceleration_cm_s2)
+
+        speed_delay = max(
+            speed_delay, self.left_motor.min_delay_us, self.right_motor.min_delay_us
+        )
+
+        start_speed_delay = max(start_speed_delay, speed_delay)
+
+        # Full ramp, not cut to half the move because we don't know how long the move is
+        ramp = self._ramp_steps_needed(start_speed_delay, speed_delay, acceleration_cm_s2)
+        ramp_delays, ramp_pwms = self._ramp_delays(
+            start_speed_delay, speed_delay, acceleration_cm_s2, ramp
+        )
+        # Separate ramp for braking, walked backwards when the robot stops
+        brake = self._ramp_steps_needed(start_speed_delay, speed_delay, deceleration_cm_s2)
+        brake_delays, brake_pwms = self._ramp_delays(
+            start_speed_delay, speed_delay, deceleration_cm_s2, brake
+        )
+        # Same rule as _run_steps: no ramp means min PWM
+        cruise_pwm = self.max_pwm_scale if ramp > 0 else self.min_pwm_scale
+
+        i = 0  # how far up the ramp we are: 0 = start speed, ramp = full speed
+        j = 0  # how far up the brake ramp we are, used once stopping
+        stopping = False
+        count = 0  # steps taken, only used to check the sensor every check_every steps
+
+        gc.collect()
+        left_scale, right_scale = self.left_motor.pwm_scale, self.right_motor.pwm_scale
+
+        # several parts of this is the same as _run_steps function
+        try:
+            next_time = ticks_us()
+            while True:
+                # check the sensor now and then, until we've decided to stop
+                if not stopping and count % check_every == 0 and not keep_going():
+                    stopping = True
+                    # jump to the point on the brake ramp with the same speed.
+                    # speed^2 = start^2 + 2*a*steps, so j = i * acceleration / deceleration
+                    j = i * brake // ramp if ramp > 0 else 0
+                count += 1
+
+                if stopping:
+                    if j == 0:
+                        break  # back at start speed: done
+                    j -= 1  # walk the brake ramp backwards
+                    step_delay = brake_delays[j]
+                    step_pwm = brake_pwms[j]
+                elif i < ramp:
+                    step_delay = ramp_delays[i]
+                    step_pwm = ramp_pwms[i]
+                    i += 1  # walk the ramp forwards
+                else:
+                    step_delay = speed_delay  # full speed
+                    step_pwm = cruise_pwm
+
+                # step both motors
+                self.left_motor.pwm_scale = step_pwm
+                self.left_motor.step(left_step)
+                self.right_motor.pwm_scale = step_pwm
+                self.right_motor.step(right_step)
+
+                # wait
+                next_time = ticks_add(next_time, step_delay)
+                wait = ticks_diff(next_time, ticks_us())
+                if wait > 0:
+                    sleep_us(wait)
+                else:
+                    next_time = ticks_us()
+        finally:
+            self.stop()
+            self.left_motor.pwm_scale = left_scale
+            self.right_motor.pwm_scale = right_scale
+
+    def drive_while(self, keep_going, direction="forward", speed_cm_s=None, start_speed_cm_s=None, acceleration_cm_s2=None, deceleration_cm_s2=None, check_every=10):
         if direction not in ["forward", "backward"]:
             raise ValueError("Direction must be 'forward' or 'backward'.")
-        
+        d = 1 if direction == "forward" else -1
+        self._run_while(keep_going, d, d, speed_cm_s, start_speed_cm_s, acceleration_cm_s2, deceleration_cm_s2, check_every)
+
+
+    def turn_while(self, keep_going, direction="left", speed_cm_s=None, start_speed_cm_s=None, acceleration_cm_s2=None, deceleration_cm_s2=None, check_every=10):
+        if direction == "left":
+            self._run_while(keep_going, -1, 1, speed_cm_s, start_speed_cm_s, acceleration_cm_s2, deceleration_cm_s2, check_every)
+        elif direction == "right":
+            self._run_while(keep_going, 1, -1, speed_cm_s, start_speed_cm_s, acceleration_cm_s2, deceleration_cm_s2, check_every)
+        else:
+            raise ValueError("Direction must be 'left' or 'right'.")
+
 
     def drive_cm(
         self,
