@@ -17,15 +17,3 @@ for _ in range(4):
     time.sleep(1)
     robot.turn_in_place(180, "left", speed_cm_s=80, start_speed_cm_s=8, acceleration_cm_s2=35)
     time.sleep(1)
-
-
-# robot.drive_cm(100, speed_cm_s=40, start_speed_cm_s=12, acceleration_cm_s2=30)
-
-"""
-# With ramp
-robot.drive_cm(300, speed_cm_s=50, start_speed_cm_s=12, acceleration_cm_s2=30)
-time.sleep(1)
-
-# Without ramp (starts at full speed)
-#robot.drive_cm(100, speed_cm_s=34, start_speed_cm_s=34)
-"""
