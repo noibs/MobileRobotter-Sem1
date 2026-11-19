@@ -1,14 +1,6 @@
 from machine import ADC
 
-from differential_drive import DifferentialDrive
-from stepper_motor import StepperMotor
-
-test_pwm = 0.2
-
-left = StepperMotor([0, 1, 2, 3], pwm_pct=test_pwm, frequency=18_000, mode="half")
-right = StepperMotor([4, 5, 6, 7], pwm_pct=test_pwm, frequency=18_000, mode="half")
-
-robot = DifferentialDrive(left, right, wheel_diameter_cm=8.7, wheelbase_cm=23.3, invert_left=False, invert_right=False)
+from robot_config import robot
 
 adc1 = ADC(28)
 adc2= ADC(27)

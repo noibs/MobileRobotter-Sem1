@@ -1,13 +1,6 @@
-from stepper_motor import StepperMotor
-from differential_drive import DifferentialDrive
 import time
 
-test_pwm = 0.2
-
-left = StepperMotor([0, 1, 2, 3], pwm_pct=test_pwm, frequency=20_000, mode="full")
-right = StepperMotor([4, 5, 6, 7], pwm_pct=test_pwm, frequency=20_000, mode="full")
-
-robot = DifferentialDrive(left, right, invert_left=False, invert_right=False,)
+from robot_config import robot
 
 # Drive in a square
 time.sleep(1)
