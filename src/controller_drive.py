@@ -1,5 +1,6 @@
 import time, sys
-from machine import ADC, Pin
+from machine import ADC, I2C, Pin
+import ssd1306
 
 from differential_drive import DifferentialDrive
 from stepper_motor import StepperMotor
@@ -15,13 +16,27 @@ adc1 = ADC(28)
 adc2= ADC(27)
 adc3 = ADC(26)
 
+emergency = Pin(22, Pin.IN, Pin.PULL_UP)
+
+CENTER = sum(adc1.read_u16() for _ in range(20)) // 20
+
+i2c = I2C(0, sda=Pin(8), scl=Pin(9), freq=400_000)
+
+addr = i2c.scan()[0]
+oled = ssd1306.SSD1306_I2C(128, 64, i2c, addr=addr)
+
+
 def move_forward():
+    return 60_000 > adc1.read_u16() > 34_000 and 0 < adc2.read_u16() < 65535
+
+def move_forward_fast():
     return adc1.read_u16() > 50_000 and 0 < adc2.read_u16() < 65535
 
-
 def move_backward():
-    return adc1.read_u16() < 20_000 and 0 < adc2.read_u16() < 65535
+    return   25_000 < adc1.read_u16() < 30_000 and 0 < adc2.read_u16() < 65535
 
+def move_backward_fast():
+    return adc1.read_u16() < 25_000 and 0 < adc2.read_u16() < 65535
 
 def turn_right():
     return adc2.read_u16() > 50_000 and 10_000 < adc1.read_u16() < 65535
@@ -30,9 +45,29 @@ def turn_right():
 def turn_left():
     return adc2.read_u16() < 20_000 and 10_000 < adc1.read_u16() < 65535
 
+def stick_percent(adc, center=CENTER):
+    if adc >= center:
+        p = (adc - center) / (65535 - center)
+    else:
+        p = (center - adc) / center
+    return max(0.0, min(1.0, p))   # clamp, just in case
+
+def update_display(speed, adc):
+    pct = 0 if speed == 0 else stick_percent(adc)
+    oled.fill(0)
+    oled.text(f"Speed: {speed}", 0, 30)
+    oled.rect(0, 50, 119, 10, 1)
+    oled.fill_rect(1, 51, int(117 * pct), 8, 1)
+    oled.show()
+
+
 
 def emergency_stop():
-    return  adc3.read_u16() < 400
+    return  adc3.read_u16() < 200
+
+def get_speed(adc_value):
+    print(adc_value / 936)
+    return adc_value / 936
 
 """
 while True:
@@ -43,13 +78,27 @@ while True:
 
 while True:
     if move_forward():
-        robot.drive_while(move_forward, speed_cm_s=70, start_speed_cm_s=10,acceleration_cm_s2=20, deceleration_cm_s2=60, check_every=2)
+        update_display(35, adc1.read_u16())
+        robot.drive_while(move_forward, speed_cm_s=35, start_speed_cm_s=20,acceleration_cm_s2=20, deceleration_cm_s2=60, check_every=2)
+    elif move_forward_fast():
+        update_display(70, adc1.read_u16())
+        robot.drive_while(move_forward_fast, speed_cm_s=70, start_speed_cm_s=20,acceleration_cm_s2=20, deceleration_cm_s2=60, check_every=2)
     elif move_backward():
-        robot.drive_while(move_backward, direction="backward", speed_cm_s=30, start_speed_cm_s=5, acceleration_cm_s2=15,deceleration_cm_s2=60, check_every=5)
+        update_display(35, adc1.read_u16())
+        robot.drive_while(move_backward, direction="backward", speed_cm_s=35, start_speed_cm_s=5, acceleration_cm_s2=15,deceleration_cm_s2=60, check_every=5)
+    elif move_backward_fast():
+        update_display(70, adc1.read_u16())
+        robot.drive_while(move_backward_fast, direction="backward", speed_cm_s=70, start_speed_cm_s=20,acceleration_cm_s2=20, deceleration_cm_s2=60, check_every=2)
     elif turn_right():
-        robot.turn_while(turn_right, "right", speed_cm_s=10, start_speed_cm_s=5, deceleration_cm_s2=60, check_every=2)
+        update_display(20, adc2.read_u16())
+        robot.turn_while(turn_right, "right", speed_cm_s=20, start_speed_cm_s=20, deceleration_cm_s2=60, check_every=2)
     elif turn_left():
-        robot.turn_while(turn_left, "left", speed_cm_s=10, start_speed_cm_s=5, deceleration_cm_s2=60, check_every=2)
+        update_display(20, adc2.read_u16())
+        robot.turn_while(turn_left, "left", speed_cm_s=20, start_speed_cm_s=20, deceleration_cm_s2=60, check_every=2)
     elif emergency_stop():
+        update_display(0, 0)
         robot.stop()
         break
+    else:
+
+        update_display(0, 0)
