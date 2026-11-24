@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1700" viewBox="0 0 1480 1700">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/></marker><marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/></marker></defs>
+<rect width="1480" height="1700" fill="#ffffff"/>
+<rect x="30" y="30" width="560" height="1560" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<rect x="30" y="30" width="560" height="44" fill="#1e293b"/>
+<text x="310.0" y="52" font-family="Arial, Helvetica, sans-serif" font-size="15" font-style="normal" font-weight="bold" fill="#ffffff" text-anchor="middle" dominant-baseline="central">CORE 0  ·  main program and stepping</text>
+<rect x="610" y="30" width="260" height="1560" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<rect x="610" y="30" width="260" height="44" fill="#1e293b"/>
+<text x="740.0" y="52" font-family="Arial, Helvetica, sans-serif" font-size="15" font-style="normal" font-weight="bold" fill="#ffffff" text-anchor="middle" dominant-baseline="central">SHARED MEMORY</text>
+<rect x="890" y="30" width="560" height="1560" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<rect x="890" y="30" width="560" height="44" fill="#1e293b"/>
+<text x="1170.0" y="52" font-family="Arial, Helvetica, sans-serif" font-size="15" font-style="normal" font-weight="bold" fill="#ffffff" text-anchor="middle" dominant-baseline="central">CORE 1  ·  control, about every 1 ms</text>
+<rect x="140.0" y="100" width="340" height="44" rx="22.0" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="122.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">robot.follow_line(speed, distance)</text>
+<path d="M 310,144 L 310,170" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="140.0" y="170" width="340" height="44" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="192.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Check calibration, reset PD memory</text>
+<path d="M 310,214 L 310,240" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="140.0" y="240" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="259.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">move(): validate input,</text>
+<text x="310" y="276.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">set start speed</text>
+<path d="M 310,296 L 310,322" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="140.0" y="322" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="341.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">First steer(), write start delays and PWM,</text>
+<text x="310" y="358.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">RUNNING = 1</text>
+<path d="M 310,378 L 310,404" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="140.0" y="404" width="340" height="44" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="426.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Start core 1 thread</text>
+<path d="M 480,426 L 1000,426" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="8 5" marker-end="url(#arrow)"/>
+<text x="740" y="414" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">_thread.start_new_thread()</text>
+<rect x="50" y="466" width="510" height="574" rx="10" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="552" y="480" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="italic" font-weight="normal" fill="#475569" text-anchor="end" dominant-baseline="central">Stepping loop</text>
+<path d="M 310,448 L 310,500" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<circle cx="310" cy="485" r="3.5" fill="#334155"/>
+<rect x="140.0" y="500" width="340" height="44" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="522.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Read wheel delay (left, then right)</text>
+<path d="M 310,544 L 310,555" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polygon points="310,555.0 425.0,600 310,645.0 195.0,600" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="592.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Delay passed since</text>
+<text x="310" y="608.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">last step?</text>
+<text x="318" y="658" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">Yes</text>
+<path d="M 310,645 L 310,680" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="140.0" y="680" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="699.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Step motor, count step,</text>
+<text x="310" y="716.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">schedule next step</text>
+<path d="M 310,736 L 310,790" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M 195,600 L 90,600 L 90,765 L 310,765" fill="none" stroke="#334155" stroke-width="1.5"/>
+<circle cx="310" cy="765" r="3.5" fill="#334155"/>
+<text x="150" y="588" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">No</text>
+<polygon points="310,790.0 425.0,835 310,880.0 195.0,835" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="827.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Core 1 heartbeat</text>
+<text x="310" y="843.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">within 100 ms?</text>
+<text x="318" y="893" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">Yes</text>
+<path d="M 310,880 L 310,930" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polygon points="310,930.0 425.0,975 310,1020.0 195.0,975" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="975.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">RUNNING = 1?</text>
+<path d="M 195,975 L 70,975 L 70,485 L 310,485" fill="none" stroke="#334155" stroke-width="1.5"/>
+<text x="140" y="963" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Yes</text>
+<path d="M 425,835 L 530,835 L 530,1225 L 310,1225" fill="none" stroke="#334155" stroke-width="1.5"/>
+<text x="478" y="823" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">No: error</text>
+<text x="318" y="1035" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">No</text>
+<path d="M 310,1020 L 310,1240" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<circle cx="310" cy="1225" r="3.5" fill="#334155"/>
+<rect x="140.0" y="1240" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="1259.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">RUNNING = 0, wait until</text>
+<text x="310" y="1276.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">core 1 sets CORE1_DONE</text>
+<path d="M 310,1296 L 310,1315" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polygon points="310,1315.0 425.0,1360 310,1405.0 195.0,1360" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="1352.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">End speed = 0</text>
+<text x="310" y="1368.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">or error?</text>
+<text x="318" y="1418" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">Yes</text>
+<path d="M 310,1405 L 310,1440" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="140.0" y="1440" width="340" height="44" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="1462.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Stop motors, speed = 0</text>
+<path d="M 310,1484 L 310,1540" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M 425,1360 L 520,1360 L 520,1520 L 310,1520" fill="none" stroke="#334155" stroke-width="1.5"/>
+<circle cx="310" cy="1520" r="3.5" fill="#334155"/>
+<text x="470" y="1348" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">No</text>
+<text x="527" y="1440" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="italic" font-weight="normal" fill="#475569" text-anchor="start" dominant-baseline="central">keep speed for</text>
+<text x="527" y="1455" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="italic" font-weight="normal" fill="#475569" text-anchor="start" dominant-baseline="central">the next move</text>
+<rect x="140.0" y="1540" width="340" height="44" rx="22.0" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+<text x="310" y="1562.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Return to the script</text>
+<rect x="1000.0" y="404" width="340" height="44" rx="22.0" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="426.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Core 1 thread starts</text>
+<path d="M 1170,448 L 1170,500" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<circle cx="1170" cy="485" r="3.5" fill="#334155"/>
+<polygon points="1019.0,500 1349.0,500 1321.0,556 991.0,556" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="519.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">steer(): read 8 line sensors,</text>
+<text x="1170" y="536.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">position e from −1 to 1</text>
+<path d="M 1170,556 L 1170,565" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polygon points="1170,565.0 1255.0,610 1170,655.0 1085.0,610" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="610.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Line seen?</text>
+<text x="1178" y="668" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">Yes</text>
+<path d="M 1170,655 L 1170,690" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1020.0" y="690" width="300" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="709.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Every 1 cm driven:</text>
+<text x="1170" y="726.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">D = Δe / Δs</text>
+<path d="M 1170,746 L 1170,790" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<path d="M 1085,610 L 1047,610" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="1066" y="596" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">No</text>
+<rect x="897.0" y="582" width="150" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="972" y="601.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">e = last side (±1),</text>
+<text x="972" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">D = 0</text>
+<path d="M 972,638 L 972,765 L 1170,765" fill="none" stroke="#334155" stroke-width="1.5"/>
+<circle cx="1170" cy="765" r="3.5" fill="#334155"/>
+<rect x="1000.0" y="790" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="809.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">correction = Kp·e + Kd·D</text>
+<text x="1170" y="826.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">factors = 1 ± correction</text>
+<path d="M 1170,846 L 1170,872" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1000.0" y="872" width="340" height="44" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="894.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Measure dt, heartbeat + 1</text>
+<path d="M 1170,916 L 1170,946" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1000.0" y="946" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="965.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Base speed target:</text>
+<text x="1170" y="982.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">min(v_cruise, √(v_end² + 2·a·s_left))</text>
+<path d="M 1170,1002 L 1170,1026" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1000.0" y="1026" width="340" height="44" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="1048.0" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Ramp base speed by acceleration · dt</text>
+<path d="M 1170,1070 L 1170,1094" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1000.0" y="1094" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="1113.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Wheel speed = factor · base speed,</text>
+<text x="1170" y="1130.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">ramped by wheel acceleration · dt</text>
+<path d="M 1170,1150 L 1170,1174" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1000.0" y="1174" width="340" height="56" rx="5" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="1193.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Convert to step delay and PWM,</text>
+<text x="1170" y="1210.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">write to shared memory</text>
+<path d="M 1170,1230 L 1170,1255" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<polygon points="1170,1255.0 1285.0,1300 1170,1345.0 1055.0,1300" fill="#f1f5f9" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="1292.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Distance driven</text>
+<text x="1170" y="1308.0" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="normal" fill="#1e293b" text-anchor="middle" dominant-baseline="central">or RUNNING = 0?</text>
+<path d="M 1285,1300 L 1420,1300 L 1420,485 L 1170,485" fill="none" stroke="#334155" stroke-width="1.5"/>
+<text x="1350" y="1288" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">No</text>
+<text x="1178" y="1358" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">Yes</text>
+<path d="M 1170,1345 L 1170,1400" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="1000.0" y="1400" width="340" height="56" rx="28.0" fill="#e2e8f0" stroke="#334155" stroke-width="1.5"/>
+<text x="1170" y="1419.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Core 1 done:</text>
+<text x="1170" y="1436.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">RUNNING = 0, CORE1_DONE = 1</text>
+<path d="M 625,500 L 625,1470 A 115.0,16 0 0 0 855,1470 L 855,500" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<ellipse cx="740.0" cy="500" rx="115.0" ry="16" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="740.0" y="539.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">Shared array</text>
+<text x="740.0" y="556.5" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">11 × int32</text>
+<text x="740.0" y="610" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">RUNNING</text>
+<text x="740.0" y="625" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">both cores</text>
+<text x="740.0" y="650" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">LEFT / RIGHT_DELAY</text>
+<text x="740.0" y="665" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 1 → core 0</text>
+<text x="740.0" y="690" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">LEFT / RIGHT_PWM</text>
+<text x="740.0" y="705" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 1 → core 0</text>
+<text x="740.0" y="730" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">LEFT / RIGHT_STEPS</text>
+<text x="740.0" y="745" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 0 → core 1</text>
+<text x="740.0" y="770" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">HEARTBEAT</text>
+<text x="740.0" y="785" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 1 → core 0</text>
+<text x="740.0" y="810" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">CORE1_DONE</text>
+<text x="740.0" y="825" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 1 → core 0</text>
+<text x="740.0" y="850" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">MAX_LATE_US</text>
+<text x="740.0" y="865" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 0 (jitter)</text>
+<text x="740.0" y="890" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="middle" dominant-baseline="central">SLOWEST_LOOP_US</text>
+<text x="740.0" y="905" font-family="Arial, Helvetica, sans-serif" font-size="11" font-style="normal" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">core 1 (loop time)</text>
+<text x="740.0" y="937.5" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">One writer per value.</text>
+<text x="740.0" y="952.5" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">32-bit writes are atomic</text>
+<text x="740.0" y="967.5" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">on the RP2040, so no</text>
+<text x="740.0" y="982.5" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="normal" fill="#475569" text-anchor="middle" dominant-baseline="central">locks are needed.</text>
+<path d="M 625,522 L 480,522" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="552.5" y="512" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">delays, PWM</text>
+<path d="M 480,708 L 625,708" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="552.5" y="698" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">step counts</text>
+<path d="M 625,810 L 361,810" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="493.0" y="800" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">heartbeat</text>
+<path d="M 625,1268 L 480,1268" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="552.5" y="1258" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">CORE1_DONE</text>
+<path d="M 1000,894 L 855,894" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="927.5" y="884" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">heartbeat</text>
+<path d="M 1000,1202 L 855,1202" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="927.5" y="1192" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">delays, PWM</text>
+<path d="M 855,1275 L 1119,1275" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="987.0" y="1265" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">step counts</text>
+<path d="M 1000,1428 L 855,1428" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="927.5" y="1418" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-style="normal" font-weight="normal" fill="#2563eb" text-anchor="middle" dominant-baseline="central">done flags</text>
+<text x="40" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="13" font-style="normal" font-weight="bold" fill="#1e293b" text-anchor="start" dominant-baseline="central">Legend</text>
+<rect x="120" y="1609" width="46" height="26" rx="13" fill="#e2e8f0" stroke="#334155" stroke-width="1.2"/>
+<text x="174" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">start / end</text>
+<rect x="270" y="1609" width="46" height="26" rx="4" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="324" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">process</text>
+<polygon points="420,1607 446,1622 420,1637 394,1622" fill="#f1f5f9" stroke="#334155" stroke-width="1.2"/>
+<text x="454" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">decision</text>
+<polygon points="540,1609 590,1609 580,1635 530,1635" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text x="598" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">sensor input</text>
+<path d="M 700,1622 L 750,1622" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="758" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">program flow</text>
+<path d="M 870,1622 L 920,1622" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-data)"/>
+<text x="928" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">data through shared memory</text>
+<path d="M 1120,1622 L 1170,1622" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="8 5" marker-end="url(#arrow)"/>
+<text x="1178" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">starts a thread</text>
+<circle cx="1300" cy="1622" r="3.5" fill="#334155"/>
+<text x="1312" y="1622" font-family="Arial, Helvetica, sans-serif" font-size="12" font-style="normal" font-weight="normal" fill="#1e293b" text-anchor="start" dominant-baseline="central">paths join</text>
+</svg>
