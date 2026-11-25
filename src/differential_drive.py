@@ -496,7 +496,7 @@ class DifferentialDrive:
             self.current_speed_cm_s = min(self.start_speed_cm_s, speed_cm_s)
             gc.collect()  # only from standstill: a collection takes a few ms while the wheels would wait
 
-        # Start values, so core 0 can step before core 1 has finished its first loop
+        # Start values, so core 0 can step before core 1 has finished its first loop, if we make a continues movement not from standstill.
         shared = self._shared
         for i in range(SHARED_SIZE):
             shared[i] = 0

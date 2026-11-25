@@ -10,4 +10,4 @@ from robot_config import sensor
 # Also try the red start line and a T: how many sensors see them?
 while True:
     print(sensor.read_position(), sensor.line_count)
-    sleep_ms(200)
+    sleep_ms(500)

@@ -69,7 +69,7 @@ class LineSensor:
         # We divide by the outermost position to normalise the position between -1 and 1 no matter the amount of sensors
         return weighted / (total * self._outermost)
 
-    def calibrate(self, robot, distance_cm=15, speed_cm_s=2):
+    def calibrate(self, robot, distance_cm=15, speed_cm_s=6):
         # Drives distance_cm forward and back over the line and keeps each sensor's lowest (floor) and
         # highest (line) value. Why: every sensor reads differently, and read_position() needs each
         # sensor's own floor and line value to scale them all to the same 0-1000
